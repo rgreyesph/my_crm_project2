@@ -19,7 +19,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # DEBUG automatically False unless explicitly 'True' in environment
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 print(f"DEBUG: DEBUG={DEBUG}")
 # ALLOWED_HOSTS read from environment variable, split by comma
 # Use a distinct name for prod hosts env var, default to empty string
@@ -161,6 +161,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Directories where Django looks for static files during development (in addition to app static dirs)
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Optional, for development
 # Whitenoise storage backend (handles compression and caching headers)
+
 STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",

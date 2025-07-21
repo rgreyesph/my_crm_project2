@@ -14,6 +14,10 @@ until python manage.py migrate --check >> /var/log/collectstatic.log 2>&1; do
     sleep 2
 done
 echo "Running python manage.py collectstatic --noinput --clear --verbosity 2..." | tee -a /var/log/collectstatic.log
+
+mkdir -p /var/app/current/staticfiles
+chown webapp:webapp /var/app/current/staticfiles
+
 python manage.py collectstatic --noinput --clear --verbosity 2 >> /var/log/collectstatic.log 2>&1
 
 echo "Copying minified Select2 files to non-minified names for dal compatibility..." | tee -a /var/log/collectstatic.log
