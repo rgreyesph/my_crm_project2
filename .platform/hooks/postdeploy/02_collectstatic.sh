@@ -1,3 +1,5 @@
+#!/bin/bash
+
 touch /var/log/collectstatic.log
 chmod 664 /var/log/collectstatic.log
 chown webapp:webapp /var/log/collectstatic.log
