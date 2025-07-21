@@ -46,6 +46,7 @@ print(f"DEBUG: ALLOWED_HOSTS={ALLOWED_HOSTS}")
 INSTALLED_APPS = [
     'dal',
     'dal_select2',
+    'dal_legacy_static',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

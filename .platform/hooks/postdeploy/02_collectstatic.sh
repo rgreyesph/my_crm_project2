@@ -21,6 +21,28 @@ python manage.py collectstatic --noinput --clear --verbosity 2 >> /var/log/colle
 echo "Copying minified Select2 files to non-minified names for dal compatibility..." | tee -a /var/log/collectstatic.log
 cp /var/app/current/staticfiles/admin/css/vendor/select2/select2.min.css /var/app/current/staticfiles/admin/css/vendor/select2/select2.css 2>> /var/log/collectstatic.log
 cp /var/app/current/staticfiles/admin/js/vendor/select2/select2.full.min.js /var/app/current/staticfiles/admin/js/vendor/select2/select2.full.js 2>> /var/log/collectstatic.log
+
+# --- IN .platform/hooks/postdeploy/02_collectstatic.sh: AFTER existing cp ---
+# (Existing cp for admin/select2...)
+echo "Copying DAL minified to non-min for compatibility..." | tee -a /var/log/collectstatic.log
+cp /var/app/current/staticfiles/autocomplete_light/select2.min.css /var/app/current/staticfiles/autocomplete_light/select2.css 2>> /var/log/collectstatic.log || echo "WARN: DAL select2.min.css not found" >> /var/log/collectstatic.log
+cp /var/app/current/staticfiles/autocomplete_light/select2.min.js /var/app/current/staticfiles/autocomplete_light/select2.js 2>> /var/log/collectstatic.log || echo "WARN: DAL select2.min.js not found" >> /var/log/collectstatic.log
+cp /var/app/current/staticfiles/autocomplete_light/autocomplete_light.min.js /var/app/current/staticfiles/autocomplete_light/autocomplete_light.js 2>> /var/log/collectstatic.log || echo "WARN: DAL autocomplete_light.min.js not found" >> /var/log/collectstatic.log
+cp /var/app/current/staticfiles/autocomplete_light/i18n/en.min.js /var/app/current/staticfiles/autocomplete_light/i18n/en.js 2>> /var/log/collectstatic.log || echo "WARN: DAL i18n/en.min.js not found" >> /var/log/collectstatic.log
+if [ $? -eq 0 ]; then echo "SUCCESS: DAL files copied." | tee -a /var/log/collectstatic.log; fi
+
+
+echo "Ensuring DAL legacy static files..." | tee -a /var/log/collectstatic.log
+if [ ! -f /var/app/current/staticfiles/autocomplete_light/i18n/en.js ]; then
+    cp /var/app/current/staticfiles/autocomplete_light/i18n/en.min.js /var/app/current/staticfiles/autocomplete_light/i18n/en.js 2>> /var/log/collectstatic.log || echo "WARN: en.min.js not found" >> /var/log/collectstatic.log
+fi
+if [ ! -f /var/app/current/staticfiles/autocomplete_light/select2.js ]; then
+    cp /var/app/current/staticfiles/autocomplete_light/select2.min.js /var/app/current/staticfiles/autocomplete_light/select2.js 2>> /var/log/collectstatic.log || echo "WARN: select2.min.js not found" >> /var/log/collectstatic.log
+fi
+if [ ! -f /var/app/current/staticfiles/autocomplete_light/autocomplete_light.js ]; then
+    cp /var/app/current/staticfiles/autocomplete_light/autocomplete_light.min.js /var/app/current/staticfiles/autocomplete_light/autocomplete_light.js 2>> /var/log/collectstatic.log || echo "WARN: autocomplete_light.min.js not found" >> /var/log/collectstatic.log
+fi
+
 if [ $? -eq 0 ]; then
   echo "SUCCESS: Minified files copied." | tee -a /var/log/collectstatic.log
 else
