@@ -18,6 +18,23 @@ done
 echo "Running python manage.py collectstatic --noinput --clear --verbosity 2..." | tee -a /var/log/collectstatic.log
 python manage.py collectstatic --noinput --clear --verbosity 2 >> /var/log/collectstatic.log 2>&1
 
+echo "Copying minified Select2 files to non-minified names for dal compatibility..." | tee -a /var/log/collectstatic.log
+cp /var/app/current/staticfiles/admin/css/vendor/select2/select2.min.css /var/app/current/staticfiles/admin/css/vendor/select2/select2.css 2>> /var/log/collectstatic.log
+cp /var/app/current/staticfiles/admin/js/vendor/select2/select2.full.min.js /var/app/current/staticfiles/admin/js/vendor/select2/select2.full.js 2>> /var/log/collectstatic.log
+if [ $? -eq 0 ]; then
+  echo "SUCCESS: Minified files copied." | tee -a /var/log/collectstatic.log
+else
+  echo "WARNING: Failed to copy minified files." | tee -a /var/log/collectstatic.log
+fi
+# For autocomplete_light i18n/en.js if missing (assuming it's collected but lang-specific):
+if [ ! -f /var/app/current/staticfiles/autocomplete_light/i18n/en.js ]; then
+  echo "Creating placeholder for i18n/en.js if needed..." | tee -a /var/log/collectstatic.log
+  mkdir -p /var/app/current/staticfiles/autocomplete_light/i18n/
+  touch /var/app/current/staticfiles/autocomplete_light/i18n/en.js
+  chown webapp:webapp /var/app/current/staticfiles/autocomplete_light/i18n/en.js
+fi
+
+
 COLLECT_STATUS=$?
 if [ $COLLECT_STATUS -eq 0 ]; then
   echo "SUCCESS: Static files collected at $(date)." | tee -a /var/log/collectstatic.log

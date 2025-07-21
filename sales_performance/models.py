@@ -1,5 +1,5 @@
 from datetime import timedelta
-
+from datetime import date
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -65,11 +65,17 @@ class SalesTarget(models.Model):
 
     @property
     def period_description(self):
-        now = timezone.now().replace(day=1, month=self.start_date.month + 1)
-        if (
-            self.start_date.day == 1 and
-            self.end_date.day == (now - timedelta(days=1)).day
-        ):
+        # Calculate next month's first day, handling December (month=12 -> year+1, month=1)
+        if self.start_date.month == 12:
+            next_year = self.start_date.year + 1
+            next_month = 1
+        else:
+            next_year = self.start_date.year
+            next_month = self.start_date.month + 1
+        next_month_first = date(next_year, next_month, 1)
+        last_day_of_month = (next_month_first - timedelta(days=1)).day
+
+        if self.start_date.day == 1 and self.end_date.day == last_day_of_month:
             return self.start_date.strftime('%b %Y')
         return (
             f"{self.start_date.strftime('%Y-%m-%d')} to "
