@@ -1,0 +1,28 @@
+# requirements.in
+# Core Framework
+Django>=5.0,<5.3 # Keep Django version flexible but within 5.x for now
+
+# Database
+psycopg-binary>=3.1
+dj-database-url>=2.0 # For parsing DATABASE_URL
+
+# Web Server / Static Files
+gunicorn>=21.0 # Application server
+whitenoise[brotli]>=6.0 # Static files serving
+
+# App Functionality
+django-filter>=24.0
+django-crispy-forms>=2.0
+crispy-bootstrap5>=2022.0
+django-autocomplete-light>=3.10.0
+openpyxl>=3.1.0 # For Excel export
+python-dotenv>=1.0.0 # For .env loading
+# requirements.in
+# ... other packages like Django, gunicorn, etc. ...
+python-dateutil>=2.8.0 # Add this line
+
+# Optional: For S3 Media file storage (Uncomment if/when needed)
+# boto3>=1.20
+# django-storages>=1.14
+django-anymail>=13.0 # Or your preferred version constraint like >=9.0
+boto3>=1.26.0 # Or a more recent stable version - this provides AWS SDK
