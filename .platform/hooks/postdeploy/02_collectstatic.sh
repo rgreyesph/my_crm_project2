@@ -42,12 +42,15 @@ for file in select2.css select2.js autocomplete_light.js i18n/en.js; do
         echo "ERROR: No hashed version found for ${file}" | tee -a /var/log/collectstatic.log
     fi
 done
+# Add for main.js with dir check to avoid find error
 if [ -d "/var/app/current/staticfiles/js/" ]; then
     main_hashed=$(find /var/app/current/staticfiles/js/ -name "main.[a-f0-9]*.js*" | head -n 1)
     if [ -n "$main_hashed" ]; then
         cp -f "$main_hashed" "/var/app/current/staticfiles/js/main.js" 2>> /var/log/collectstatic.log || echo "WARN: Failed to copy $main_hashed to main.js" >> /var/log/collectstatic.log
         echo "SUCCESS: Mapped $main_hashed to main.js" | tee -a /var/log/collectstatic.log
     fi
+else
+    echo "WARN: /var/app/current/staticfiles/js/ dir missing" | tee -a /var/log/collectstatic.log
 fi
 
 COLLECT_STATUS=$?
