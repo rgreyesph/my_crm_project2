@@ -34,16 +34,21 @@ cp /var/app/current/staticfiles/autocomplete_light/i18n/en.min.js /var/app/curre
 
 echo "Mapping WhiteNoise hashed files for DAL..." | tee -a /var/log/collectstatic.log
 for file in select2.css select2.js autocomplete_light.js i18n/en.js; do
-    # Find hashed file (e.g., select2.min.abcdef.js.gz or .br)
     hashed_file=$(find /var/app/current/staticfiles/autocomplete_light/ -name "*${file}*" | grep -E "\.[a-f0-9]+\.${file}$|\.min\.[a-f0-9]+\.${file}$|\.[a-f0-9]+\.${file}\.(gz|br)$|\.min\.[a-f0-9]+\.${file}\.(gz|br)$" | head -n 1)
     if [ -n "$hashed_file" ]; then
-        # Copy hashed to un-hashed (strip .gz/.br if compressed)
         cp -f "$hashed_file" "/var/app/current/staticfiles/autocomplete_light/${file}" 2>> /var/log/collectstatic.log || echo "WARN: Failed to copy $hashed_file to ${file}" >> /var/log/collectstatic.log
         echo "SUCCESS: Mapped $hashed_file to ${file}" | tee -a /var/log/collectstatic.log
     else
         echo "ERROR: No hashed version found for ${file}" | tee -a /var/log/collectstatic.log
     fi
 done
+
+main_hashed=$(find /var/app/current/staticfiles/js/ -name "main.[a-f0-9]*.js*" | head -n 1)
+if [ -n "$main_hashed" ]; then
+    cp -f "$main_hashed" "/var/app/current/staticfiles/js/main.js" 2>> /var/log/collectstatic.log || echo "WARN: Failed to copy $main_hashed to main.js" >> /var/log/collectstatic.log
+    echo "SUCCESS: Mapped $main_hashed to main.js" | tee -a /var/log/collectstatic.log
+fi
+
 
 COLLECT_STATUS=$?
 if [ $COLLECT_STATUS -eq 0 ]; then
