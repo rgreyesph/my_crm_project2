@@ -34,7 +34,8 @@ cp /var/app/current/staticfiles/autocomplete_light/i18n/en.min.js /var/app/curre
 
 echo "Mapping WhiteNoise hashed files for DAL..." | tee -a /var/log/collectstatic.log
 for file in select2.css select2.js autocomplete_light.js i18n/en.js; do
-    hashed_file=$(find /var/app/current/staticfiles/autocomplete_light/ -name "*${file}*" | grep -E "\.[a-f0-9]+\.${file}$|\.min\.[a-f0-9]+\.${file}$" | head -n 1)  # Improved find for hashed non-compressed
+    # Find hashed file (e.g., select2.abcdef.css or select2.min.abcdef.js.gz)
+    hashed_file=$(find /var/app/current/staticfiles/autocomplete_light/ -name "*${file}*" | grep -E "\.[a-f0-9]+\.${file}$|\.min\.[a-f0-9]+\.${file}$|\.[a-f0-9]+\.${file}\.gz$|\.min\.[a-f0-9]+\.${file}\.gz$" | head -n 1)
     if [ -n "$hashed_file" ]; then
         cp "$hashed_file" "/var/app/current/staticfiles/autocomplete_light/${file}" 2>> /var/log/collectstatic.log || echo "WARN: Failed to copy $hashed_file to ${file}" >> /var/log/collectstatic.log
         echo "SUCCESS: Mapped $hashed_file to ${file}" | tee -a /var/log/collectstatic.log
