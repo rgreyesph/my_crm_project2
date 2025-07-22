@@ -42,18 +42,18 @@ for file in select2.css select2.js autocomplete_light.js i18n/en.js; do
         echo "ERROR: No hashed version found for ${file}" | tee -a /var/log/collectstatic.log
     fi
 done
-
-main_hashed=$(find /var/app/current/staticfiles/js/ -name "main.[a-f0-9]*.js*" | head -n 1)
-if [ -n "$main_hashed" ]; then
-    cp -f "$main_hashed" "/var/app/current/staticfiles/js/main.js" 2>> /var/log/collectstatic.log || echo "WARN: Failed to copy $main_hashed to main.js" >> /var/log/collectstatic.log
-    echo "SUCCESS: Mapped $main_hashed to main.js" | tee -a /var/log/collectstatic.log
+if [ -d "/var/app/current/staticfiles/js/" ]; then
+    main_hashed=$(find /var/app/current/staticfiles/js/ -name "main.[a-f0-9]*.js*" | head -n 1)
+    if [ -n "$main_hashed" ]; then
+        cp -f "$main_hashed" "/var/app/current/staticfiles/js/main.js" 2>> /var/log/collectstatic.log || echo "WARN: Failed to copy $main_hashed to main.js" >> /var/log/collectstatic.log
+        echo "SUCCESS: Mapped $main_hashed to main.js" | tee -a /var/log/collectstatic.log
+    fi
 fi
-
 
 COLLECT_STATUS=$?
 if [ $COLLECT_STATUS -eq 0 ]; then
     echo "SUCCESS: Static files collected at $(date)." | tee -a /var/log/collectstatic.log
-    find /var/app/current/staticfiles/autocomplete_light/ -type f >> /var/log/collectstatic.log 2>&1  # Log DAL files only for debug
+    find /var/app/current/staticfiles/autocomplete_light/ -type f >> /var/log/collectstatic.log 2>&1
 else
     echo "ERROR: Static file collection failed with status $COLLECT_STATUS at $(date)." | tee -a /var/log/collectstatic.log
     cat /var/log/collectstatic.log
