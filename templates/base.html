@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  <!-- Fix mobile responsive for dropdowns -->
 
+
         <title>
             {% block title %}My CRM{% endblock %}
         </title>
@@ -15,6 +16,9 @@
         <style>
         body { padding-top: 5rem; } /* Add padding for fixed navbar */
         .container { max-width: 960px; } /* Or adjust as needed, e.g., 1140px, 1320px */
+        .select2-container { position: relative; z-index: 9999; 
+        }  <!-- Fix z-index/touch -->
+
         .select2-container .select2-selection--single {
             /* BS5 .form-control-sm values */
             min-height: calc(2em + .5rem + 2px); /* Match BS5 sm height more closely */
