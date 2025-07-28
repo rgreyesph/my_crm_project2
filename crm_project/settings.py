@@ -223,3 +223,5 @@ else:
     # Standard SMTP settings for a secure TLS connection.
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
+    
+WHITENOISE_KEEP_ONLY_HASHED_FILES = False  # Keep un-hashed for admin/DAL compatibility
