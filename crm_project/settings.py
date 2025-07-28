@@ -161,13 +161,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Directories where Django looks for static files during development (in addition to app static dirs)
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Optional, for development
 # Whitenoise storage backend (handles compression and caching headers)
-
+'''
 STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-
+'''
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",  # No manifest/hashed for admin/DAL
+    },
+}
 # Media files (User Uploads) - Not configured yet, defaults to local file system
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = BASE_DIR / 'mediafiles'
