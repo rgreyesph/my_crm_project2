@@ -2,7 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  <!-- Fix mobile responsive for dropdowns -->
+
         <title>
             {% block title %}My CRM{% endblock %}
         </title>
@@ -162,5 +163,11 @@
                 integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
                 crossorigin="anonymous"></script>
         {# Add custom JS here later if needed #}
+
+        <script>
+            $(document).on('touchstart', '.select2-selection', function(e) {
+                $(this).closest('.select2-container').find('.select2-selection').trigger('click');
+            });
+        </script>
     </body>
 </html>
