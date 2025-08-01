@@ -129,6 +129,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             assigned_to=user,
             stage__in=open_deal_stages,
         )
+        deals_by_stage = my_open_deals_qs.values('stage').annotate(count=Count('id'))
+        context['deals_by_stage'] = {Deal.StageChoices(stage['stage']).label: stage['count'] for stage in deals_by_stage}  # Dict for chart labels/data
+        
         my_pipeline_summary = my_open_deals_qs.aggregate(
             raw_total=Coalesce(
                 Sum('amount'),

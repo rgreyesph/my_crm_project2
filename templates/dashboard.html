@@ -56,7 +56,7 @@
         <div class="col-lg-6">
             {# ... Individual Target Card (Keep as is) ... #}
             {% if not user.is_admin_role or user.is_manager_role %}
-                <div class="card mb-4 shadow-sm">
+                <div class="card mb-4 shadow-sm" style="background-color: #f8f9fa;">
                     <div class="card-header">
                         My Sales Target Progress
                         {% if current_target %}({{ current_target.period_description }}){% endif %}
@@ -84,7 +84,7 @@
             {% endif %}
             {# ... Manager Team Aggregate Card (Keep as is) ... #}
             {% if user.is_manager_role %}
-                <div class="card mb-4 shadow-sm">
+                <div class="card mb-4 shadow-sm" style="background-color: #f8f9fa;">
                     <div class="card-header">Team Aggregate Progress (Current Period)</div>
                     <div class="card-body">
                         {% if team_target_total != 'N/A' %}
@@ -109,7 +109,7 @@
             {% endif %}
             {# ... Admin Global Aggregate Card (Keep as is) ... #}
             {% if user.is_admin_role %}
-                <div class="card mb-4 shadow-sm">
+                <div class="card mb-4 shadow-sm" style="background-color: #f8f9fa;">
                     <div class="card-header">Company Aggregate Progress (Current Period Targets)</div>
                     <div class="card-body">
                         {% if global_target_total != 'N/A' %}
@@ -132,8 +132,8 @@
                     </div>
                 </div>
             {% endif %}
-            {# --- Lead Summary Card (UPDATED) --- #}
-            <div class="card mb-4 shadow-sm">
+            {# --- Lead Summary Card (UPDATED) - CRM Entities Group #}
+            <div class="card mb-4 shadow-sm" style="background-color: #e6f3ff;">
                 <div class="card-header">My Lead Summary</div>
                 <div class="card-body">
                     <h6>Creation:</h6>
@@ -168,8 +168,8 @@
                 </div>
             </div>
             {# --- End Lead Summary Card --- #}
-            {# ... Monthly Activity Summary Card (Keep as is) ... #}
-            <div class="card mb-4 shadow-sm">
+            {# ... Monthly Activity Summary Card (Keep as is) - Activities Group #}
+            <div class="card mb-4 shadow-sm" style="background-color: #fff3e6;">
                 <div class="card-header">My Monthly Activity Summary</div>
                 <div class="card-body">
                     <ul class="list-unstyled mb-0">
@@ -185,8 +185,8 @@
                     </ul>
                 </div>
             </div>
-            {# ... Recent Items Card (Keep as is) ... #}
-            <div class="card mb-4 shadow-sm">
+            {# ... Recent Items Card (Keep as is) - CRM Entities Group #}
+            <div class="card mb-4 shadow-sm" style="background-color: #e6f3ff;">
                 <div class="card-header">Recently Updated Items</div>
                 <div class="card-body">
                     <h6>Accounts</h6>
@@ -219,8 +219,8 @@
         {# End Column 1 #}
         {# === COLUMN 2: Activities & Open Pipeline === #}
         <div class="col-lg-6">
-            {# ... Open Pipeline Card (Keep as is, now includes Quotes) ... #}
-            <div class="card mb-4 shadow-sm">
+            {# ... Open Pipeline Card (Keep as is) - Sales Pipeline Group #}
+            <div class="card mb-4 shadow-sm" style="background-color: #f0e6ff;">
                 <div class="card-header">My Open Pipeline</div>
                 <div class="card-body">
                     <p class="mb-2">
@@ -273,13 +273,18 @@
                     {% endif %}
                 </div>
                 <div class="card-footer text-end">
-                    <a href="{% url 'crm_entities:lead-list' %}" class="btn btn-link btn-sm">Leads</a> | <a href="{% url 'sales_pipeline:deal-list' %}"
-    class="btn btn-link btn-sm">Deals</a> | <a href="{% url 'sales_pipeline:quote-list' %}"
-    class="btn btn-link btn-sm">Quotes</a>
+                    <a href="{% url 'crm_entities:lead-list' %}" class="btn btn-link btn-sm">Leads</a> | <a href="{% url 'sales_pipeline:deal-list' %}" class="btn btn-link btn-sm">Deals</a> | <a href="{% url 'sales_pipeline:quote-list' %}" class="btn btn-link btn-sm">Quotes</a>
                 </div>
             </div>
-            {# ... Upcoming Tasks Card (Keep as is) ... #}
-            <div class="card mb-4 shadow-sm">
+            {# --- Deal Stages Overview Card - Sales Pipeline Group #}
+            <div class="card mb-4 shadow-sm" style="background-color: #f0e6ff;">
+                <div class="card-header">Deal Stages Overview</div>
+                <div class="card-body">
+                    <canvas id="dealsChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+            {# ... Upcoming Tasks Card (Keep as is) - Activities Group #}
+            <div class="card mb-4 shadow-sm" style="background-color: #fff3e6;">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     My Upcoming / Due Tasks
                     {% if my_overdue_tasks_count > 0 %}
@@ -299,8 +304,8 @@
                     <a href="{% url 'activities:task-list' %}">View All Tasks</a>
                 </div>
             </div>
-            {# ... Upcoming Calls Card (Keep as is) ... #}
-            <div class="card mb-4 shadow-sm">
+            {# ... Upcoming Calls Card (Keep as is) - Activities Group #}
+            <div class="card mb-4 shadow-sm" style="background-color: #fff3e6;">
                 <div class="card-header">My Upcoming Calls</div>
                 <ul class="list-group list-group-flush">
                     {% for call in my_upcoming_calls %}
@@ -315,8 +320,8 @@
                     <a href="{% url 'activities:call-list' %}">View All Calls</a>
                 </div>
             </div>
-            {# ... Upcoming Meetings Card (Keep as is) ... #}
-            <div class="card mb-4 shadow-sm">
+            {# ... Upcoming Meetings Card (Keep as is) - Activities Group #}
+            <div class="card mb-4 shadow-sm" style="background-color: #fff3e6;">
                 <div class="card-header">My Upcoming Meetings</div>
                 <ul class="list-group list-group-flush">
                     {% for meeting in my_upcoming_meetings %}
@@ -336,7 +341,7 @@
         {# --- Manager Team Detail Section --- #}
         {% if user.is_manager_role %}
             <div class="col-12">
-                <div class="card mb-4 shadow-sm">
+                <div class="card mb-4 shadow-sm" style="background-color: #f8f9fa;">
                     <div class="card-header">Team Performance Details (Current Period)</div>
                     {% if team_performance_data %}
                         <div class="table-responsive">
@@ -357,14 +362,11 @@
                                             <td>{{ member_data.achieved|floatformat:2|intcomma }}</td>
                                             <td>
                                                 <div class="progress"
-                                                     style="height: 18px;
-                                                            min-width: 100px"
+                                                     style="height: 18px; min-width: 100px"
                                                      title="{{ member_data.percent }}%">
                                                     <div class="progress-bar {% if member_data.percent >= 100 %}bg-success{% elif member_data.percent >= 75 %}bg-info{% elif member_data.percent >= 50 %}bg-warning{% else %}bg-secondary{% endif %}"
                                                          role="progressbar"
-                                                         style="width: {{ member_data.percent }}%;
-                                                                font-size: 0.75em;
-                                                                line-height: 18px"
+                                                         style="width: {{ member_data.percent }}%; font-size: 0.75em; line-height: 18px"
                                                          aria-valuenow="{{ member_data.percent }}"
                                                          aria-valuemin="0"
                                                          aria-valuemax="100">{{ member_data.percent }}%</div>
@@ -396,7 +398,7 @@
         {# --- Admin Overview Section --- #}
         {% if user.is_admin_role %}
             <div class="col-12">
-                <div class="card mb-4 shadow-sm">
+                <div class="card mb-4 shadow-sm" style="background-color: #f8f9fa;">
                     <div class="card-header">Overall Performance (Current Period Targets)</div>
                     {% if all_performance_data %}
                         <div class="table-responsive">
@@ -419,14 +421,11 @@
                                             <td>{{ data.achieved|floatformat:2|intcomma }}</td>
                                             <td>
                                                 <div class="progress"
-                                                     style="height: 18px;
-                                                            min-width: 100px"
+                                                     style="height: 18px; min-width: 100px"
                                                      title="{{ data.percent }}%">
                                                     <div class="progress-bar {% if data.percent >= 100 %}bg-success{% elif data.percent >= 75 %}bg-info{% elif data.percent >= 50 %}bg-warning{% else %}bg-secondary{% endif %}"
                                                          role="progressbar"
-                                                         style="width: {{ data.percent }}%;
-                                                                font-size: 0.75em;
-                                                                line-height: 18px"
+                                                         style="width: {{ data.percent }}%; font-size: 0.75em; line-height: 18px"
                                                          aria-valuenow="{{ data.percent }}"
                                                          aria-valuemin="0"
                                                          aria-valuemax="100">{{ data.percent }}%</div>
@@ -455,4 +454,26 @@
         {# End Admin Section #}
     </div>
     {# End row #}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // --- Basic Bar Chart for Open Deals by Stage ---
+        const ctx = document.getElementById('dealsChart').getContext('2d');
+        const dealsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [{% for stage, count in deals_by_stage.items %}'{{ stage }}', {% endfor %}],
+                datasets: [{
+                    label: 'Number of Deals',
+                    data: [{% for stage, count in deals_by_stage.items %}{{ count }}, {% endfor %}],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true } },
+                responsive: true
+            }
+        });
+    </script>
 {% endblock content %}
