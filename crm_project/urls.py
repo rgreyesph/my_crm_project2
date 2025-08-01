@@ -4,19 +4,12 @@ from django.urls import path, include
 from django.http import HttpResponse
 
 urlpatterns = [
-    path('admin513/', include([
-        path('', admin.site.urls),
-        path('autocomplete/', include('dal.autocomplete.urls')),
-    ])),
+    path('admin513/', admin.site.urls),  # Admin URLs without nested include
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', include('core.urls')), # Use empty path '' for homepage
-    path('crm/', include('crm_entities.urls')), 
-    # Activities
+    path('', include('core.urls')),
+    path('crm/', include('crm_entities.urls')),
     path('activities/', include('activities.urls')),
-    # Sales Pipeline
     path('pipeline/', include('sales_pipeline.urls')),
-    # Users
     path('users/', include('users.urls')),
-    # Health check
     path('health/', lambda request: HttpResponse('OK')),
 ]
