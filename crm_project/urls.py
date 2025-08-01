@@ -14,6 +14,7 @@ urlpatterns = [
     path('pipeline/', include('sales_pipeline.urls')),
     # Users
     path('users/', include('users.urls')),
+    path('autocomplete/', include('dal.autocomplete.urls')),
     # Health check
     path('health/', lambda request: HttpResponse('OK')),
 ]
