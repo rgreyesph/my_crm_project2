@@ -4,7 +4,10 @@ from django.urls import path, include
 from django.http import HttpResponse
 
 urlpatterns = [
-    path('admin513/', admin.site.urls),
+    path('admin513/', include([
+        path('', admin.site.urls),
+        path('autocomplete/', include('dal.autocomplete.urls')),
+    ])),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('core.urls')), # Use empty path '' for homepage
     path('crm/', include('crm_entities.urls')), 
@@ -14,7 +17,6 @@ urlpatterns = [
     path('pipeline/', include('sales_pipeline.urls')),
     # Users
     path('users/', include('users.urls')),
-    path('autocomplete/', include('dal.autocomplete.urls')),
     # Health check
     path('health/', lambda request: HttpResponse('OK')),
 ]
