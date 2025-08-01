@@ -31,9 +31,24 @@ chown webapp:webapp /var/app/current/staticfiles
 echo "Running python manage.py collectstatic --noinput --clear --verbosity 2..." | tee -a /var/log/collectstatic.log
 python manage.py collectstatic --noinput --clear --verbosity 2 >> /var/log/collectstatic.log 2>&1
 
+echo "DEBUG: Checking critical static files for admin dropdowns..." >> /var/log/collectstatic.log
+echo "Django admin js:" >> /var/log/collectstatic.log
+ls -l /var/app/current/staticfiles/admin/js/vendor/select2/ >> /var/log/collectstatic.log 2>&1
+echo "Django admin css:" >> /var/log/collectstatic.log
+ls -l /var/app/current/staticfiles/admin/css/vendor/select2/ >> /var/log/collectstatic.log 2>&1
+echo "Django-autocomplete-light:" >> /var/log/collectstatic.log
+ls -l /var/app/current/staticfiles/autocomplete_light/ >> /var/log/collectstatic.log 2>&1
+
 COLLECT_STATUS=$?
 if [ $COLLECT_STATUS -eq 0 ]; then
     echo "SUCCESS: Static files collected at $(date '+%c %Z')." | tee -a /var/log/collectstatic.log
+    # --- INSERT HERE: Add specific file checks for debugging ---
+    echo "DEBUG: Checking Django admin static files..." >> /var/log/collectstatic.log
+    ls -l /var/app/current/staticfiles/admin/js/vendor/select2/ >> /var/log/collectstatic.log 2>&1
+    ls -l /var/app/current/staticfiles/admin/css/vendor/select2/ >> /var/log/collectstatic.log 2>&1
+    echo "DEBUG: Checking django-autocomplete-light static files..." >> /var/log/collectstatic.log
+    ls -l /var/app/current/staticfiles/autocomplete_light/ >> /var/log/collectstatic.log 2>&1
+    # --- END INSERT HERE ---
     find /var/app/current/staticfiles/ -type f >> /var/log/collectstatic.log 2>&1
 else
     echo "ERROR: Static file collection failed with status $COLLECT_STATUS at $(date '+%c %Z')." | tee -a /var/log/collectstatic.log
