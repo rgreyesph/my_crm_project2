@@ -14,6 +14,12 @@ export SECRET_KEY=$(/opt/elasticbeanstalk/bin/get-config environment -k SECRET_K
 export DEBUG="False"
 export DATABASE_SSL="True"
 
+echo "Waiting for migrations at $(date)..." >> /var/log/collectstatic.log
+until python manage.py migrate --check >> /var/log/collectstatic.log 2>&1; do
+    echo "Migrations not complete, waiting..." >> /var/log/collectstatic.log
+    sleep 2
+done
+
 # Delete manifest to prevent hashed substitution in templates
 rm -f /var/app/current/staticfiles/staticfiles.json 2>> /var/log/collectstatic.log || echo "WARN: staticfiles.json not found, skipped deletion" >> /var/log/collectstatic.log
 
@@ -21,7 +27,7 @@ rm -f /var/app/current/staticfiles/staticfiles.json 2>> /var/log/collectstatic.l
 mkdir -p /var/app/current/staticfiles
 chown webapp:webapp /var/app/current/staticfiles
 
-# Run collectstatic (no custom mapping needed with CompressedStaticFilesStorage)
+# Run collectstatic (rely on CompressedStaticFilesStorage for no hashing)
 echo "Running python manage.py collectstatic --noinput --clear --verbosity 2..." | tee -a /var/log/collectstatic.log
 python manage.py collectstatic --noinput --clear --verbosity 2 >> /var/log/collectstatic.log 2>&1
 
